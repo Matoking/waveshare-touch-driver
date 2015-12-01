@@ -1,0 +1,1 @@
+ACTION=="add", SUBSYSTEM=="usb", DRIVER=="usb", ATTRS{idVendor}=="0eef", ATTRS{idProduct}=="0005", RUN+="/usr/bin/waveshare-touch-driver.sh"
