@@ -67,10 +67,7 @@ def grab_device(device_file, serial, packet_length=None):
                     print("Read failed, device was probably disconnected")
                     exit()
                 
-                clicked = True if packet[1:2] == b'\x01' else False
-                x_pos = packet[2:4]
-                
-                (tag, click, x, y) = struct.unpack_from('>c?HH', packet)
+                (tag, clicked, x, y) = struct.unpack_from('>c?HH', packet)
                 
                 if clicked:
                     last_x = x
