@@ -5,7 +5,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Install required dependencies
-apt-get install python python-pip libudev-dev batch
+apt-get install python python-pip libudev-dev
 pip install python-uinput pyudev
 
 # Copy the files into place

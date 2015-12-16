@@ -31,6 +31,7 @@ def grab_device(device_file, serial, packet_length=None):
             if packet_length == None:
                 packet_length = 0
                 found_tag = False
+                zero_byte_count = 0
                 
                 print("Packet length unknown for this device, keep poking the screen until I figure it out.")
                 
@@ -39,15 +40,21 @@ def grab_device(device_file, serial, packet_length=None):
                     
                     # Each packet starts with the tag 'aa' in hex
                     # After we find the first tag, we start counting the number of bytes
-                    # until the next tag arrives
-                    if sample[0] == b'\xaa' and not found_tag:
+                    # until the next tag
+                    # Also make sure the tag is followed by two or more zero bytes so we don't mistakenly
+                    # pick the tag from elsewhere
+                    if sample[0] == b'\x00' and found_tag:
+                        zero_byte_count += 1
+                        packet_length += len(sample)
+                    elif sample[0] == b'\xaa' and not found_tag:
                         found_tag = True
                         packet_length += len(sample)
-                    elif sample[0] == b'\xaa':
+                    elif sample[0] == b'\xaa' and found_tag and zero_byte_count >= 2:
+                        # We found the tag again and it was followed by two or more zero bytes
                         break
                     else:
+                        zero_byte_count = 0
                         packet_length += len(sample)
-                    
                 
                 # Packet length is now known, this blocking read is done
                 # so that the following reads always start with the tag as they should
