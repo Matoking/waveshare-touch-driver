@@ -72,6 +72,7 @@ def grab_device(device_file, serial, packet_length=None):
                     packet = f.read(packet_length)
                 except OSError:
                     print("Read failed, device was probably disconnected")
+                    emulated_device.destroy()
                     exit()
                 
                 (tag, clicked, x, y) = struct.unpack_from('>c?HH', packet)
@@ -94,6 +95,7 @@ def grab_device(device_file, serial, packet_length=None):
                     emulated_device.emit(uinput.ABS_PRESSURE, 0, True)
     except OSError:
         print("Device disconnected.")
+        emulated_device.destroy()
         exit()
         
 def get_serial(sys_name):

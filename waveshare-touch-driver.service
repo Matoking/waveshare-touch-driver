@@ -3,7 +3,7 @@ Description=Userspace driver for Waveshare touchscreens
 
 [Service]
 EnvironmentFile=/etc/waveshare-touch-env
-ExecStart=/usr/bin/waveshare-touch-driver.py --devpath $DEVPATH
+ExecStart=/usr/bin/env python -u /usr/bin/waveshare-touch-driver.py --devpath $DEVPATH
 
 [Install]
 WantedBy=multi-user.target
